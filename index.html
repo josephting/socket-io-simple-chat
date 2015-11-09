@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .messages {
+      height: 500px;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+<ul class="messages">
+</ul>
+
+<form class="chat col-md-6">
+  <input type="text" class="chat-message form-control">
+  <button class="btn btn-primary">Send</button>
+</form>
+
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+$(document).ready(function() {
+  var socket = io('http://localhost');
+  socket.on('connect', function(data) {
+    console.log(data);
+  });
+
+  socket.on('chat', function(data) {
+    $('<li/>').text(data).appendTo('.messages');
+    $('.messages').scrollTop($('.messages')[0].scrollHeight - $('.messages').height());
+  });
+
+  $('.chat').on('submit', function(e) {
+    e.preventDefault();
+    var message = $('.chat-message').val();
+    $('.chat-message').val('');
+    socket.emit('chat', message);
+  });
+});
+</script>
+</body>
+</html>
