@@ -25,9 +25,6 @@
 <script>
 $(document).ready(function() {
   var socket = io('http://localhost');
-  socket.on('connect', function(data) {
-    console.log(data);
-  });
 
   socket.on('chat', function(data) {
     $('<li/>').text(data).appendTo('.messages');
